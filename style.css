@@ -21,10 +21,23 @@ header {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
+
+.logo img {
+  width: 40px;          /* adjust size as you like (30–50px is ideal) */
+  height: 40px;
+  filter: invert(1);    /* makes it white on dark background */
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.1);
+  filter: invert(68%) sepia(98%) saturate(463%) hue-rotate(165deg) brightness(97%) contrast(94%);
+}
+
 
 nav {
   display: flex;
