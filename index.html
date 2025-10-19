@@ -10,7 +10,7 @@
 <body>
   <header>
     <nav>
-      <h1 class="logo">YourName</h1>
+      <h1 class="logo">therealdjamel</h1>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Projects</a></li>
@@ -18,7 +18,7 @@
       </ul>
     </nav>
     <div class="hero">
-      <h2>Hello, I'm <span>Your Name</span></h2>
+      <h2>Hello, I'm <span>Djamel Eddine Djouada</span></h2>
       <p>A passionate web developer creating modern & user-friendly web apps.</p>
       <a href="#projects" class="btn">View My Work</a>
     </div>
@@ -32,29 +32,13 @@
     </p>
   </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="projects-container">
-      <div class="project-card">
-        <img src="https://via.placeholder.com/400x250" alt="Project 1">
-        <h3>Project One</h3>
-        <p>Short description of your project, tools used, and what it does.</p>
-        <a href="#" class="btn">View</a>
-      </div>
-      <div class="project-card">
-        <img src="https://via.placeholder.com/400x250" alt="Project 2">
-        <h3>Project Two</h3>
-        <p>Another awesome project you’ve built. Keep it brief and visual.</p>
-        <a href="#" class="btn">View</a>
-      </div>
-      <div class="project-card">
-        <img src="https://via.placeholder.com/400x250" alt="Project 3">
-        <h3>Project Three</h3>
-        <p>A creative project showcasing your skills or something fun you’ve tried.</p>
-        <a href="#" class="btn">View</a>
-      </div>
-    </div>
-  </section>
+<section id="projects" data-aos="zoom-in">
+  <h2>Projects</h2>
+  <div id="projects-container" class="projects-container">
+    <p class="loading-text">Loading your projects...</p>
+  </div>
+</section>
+
 
   <section id="contact">
     <h2>Contact</h2>
@@ -65,5 +49,47 @@
   <footer>
     <p>© 2025 Your Name. Built with ❤️ using GitHub Pages.</p>
   </footer>
+  <script>
+  const username = "YOUR_GITHUB_USERNAME"; // 👈 change this
+
+  async function loadProjects() {
+    const container = document.getElementById("projects-container");
+    try {
+      const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+      const repos = await res.json();
+
+      container.innerHTML = ""; // Clear "loading" text
+
+      repos
+        .filter(repo => !repo.fork && !repo.archived) // skip forks/archived repos
+        .slice(0, 6) // show top 6 latest projects
+        .forEach(repo => {
+          const card = document.createElement("div");
+          card.classList.add("project-card");
+          card.setAttribute("data-aos", "flip-left");
+
+          card.innerHTML = `
+            <h3>${repo.name}</h3>
+            <p>${repo.description || "No description provided."}</p>
+            <div class="card-buttons">
+              <a href="${repo.html_url}" class="btn" target="_blank">Source</a>
+              ${repo.homepage ? `<a href="${repo.homepage}" class="btn" target="_blank">Live Demo</a>` : ""}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+      if (repos.length === 0) {
+        container.innerHTML = "<p>No public projects found yet.</p>";
+      }
+    } catch (error) {
+      container.innerHTML = "<p>Error loading projects. Please try again later.</p>";
+      console.error(error);
+    }
+  }
+
+  loadProjects();
+</script>
+
 </body>
 </html>
