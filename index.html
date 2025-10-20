@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,12 +8,13 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <header>
     <nav>
-<a href="https://github.com/therealdjamel" class="logo" target="_blank" title="View my GitHub">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Logo">
-</a>
+      <a href="https://github.com/therealdjamel" class="logo" target="_blank" title="View my GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Logo">
+      </a>
 
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
@@ -21,9 +23,9 @@
       </ul>
     </nav>
     <div class="hero">
-        <div class="profile-photo">
-  <img src="images/me.png" alt="Your photo">
-</div>
+      <div class="profile-photo">
+        <img src="images/me.png" alt="Your photo">
+      </div>
 
       <h2>Hello, I'm <span>Djamel Eddine Djouada</span></h2>
       <p>A passionate web developer creating modern & user-friendly web apps.</p>
@@ -39,12 +41,12 @@
     </p>
   </section>
 
-<section id="projects" data-aos="zoom-in">
-  <h2>Projects</h2>
-  <div id="projects-container" class="projects-container">
-    <p class="loading-text">Loading your projects...</p>
-  </div>
-</section>
+  <section id="projects" data-aos="zoom-in">
+    <h2>Projects</h2>
+    <div id="projects-container" class="projects-container">
+      <p class="loading-text">Loading your projects...</p>
+    </div>
+  </section>
 
 
   <section id="contact">
@@ -57,46 +59,52 @@
     <p>© 2025 therealdjamel. Built using GitHub Pages.</p>
   </footer>
   <script>
-  const username = "therealdjamel"; // 👈 change this
+    const username = "therealdjamel"; // 👈 change this
 
-  async function loadProjects() {
-    const container = document.getElementById("projects-container");
-    try {
-      const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-      const repos = await res.json();
+    async function loadProjects() {
+      const container = document.getElementById("projects-container");
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+        const repos = await res.json();
 
-      container.innerHTML = ""; // Clear "loading" text
+        container.innerHTML = ""; // Clear "loading" text
 
-      repos
-        .filter(repo => !repo.fork && !repo.archived) // skip forks/archived repos
-        .slice(0, 6) // show top 6 latest projects
-        .forEach(repo => {
-          const card = document.createElement("div");
-          card.classList.add("project-card");
-          card.setAttribute("data-aos", "flip-left");
+        repos
+          .filter(repo => !repo.fork && !repo.archived && repo.name.toLowerCase() !== "therealdjamel.github.io")
+          .slice(0, 6) // show top 6 latest projects
+          .forEach(repo => {
+            const card = document.createElement("div");
+            card.classList.add("project-card");
+            card.setAttribute("data-aos", "flip-left");
 
-          card.innerHTML = `
-            <h3>${repo.name}</h3>
-            <p>${repo.description || "No description provided."}</p>
-            <div class="card-buttons">
-              <a href="${repo.html_url}" class="btn" target="_blank">Source</a>
-              ${repo.homepage ? `<a href="${repo.homepage}" class="btn" target="_blank">Live Demo</a>` : ""}
-            </div>
-          `;
-          container.appendChild(card);
-        });
+card.innerHTML = `
+  <div class="project-image">
+    <img src="images/projects/${repo.name}.png" alt="${repo.name} preview">
+  </div>
+  <h3>${repo.name}</h3>
+  <p>${repo.description || "No description provided."}</p>
+  <div class="card-buttons">
+    <a href="${repo.html_url}" class="btn" target="_blank">View Source</a>
+    ${repo.homepage ? `<a href="${repo.homepage}" class="btn" target="_blank">Live Demo</a>` : ""}
+    <a href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" class="btn" target="_blank">Download ZIP</a>
+  </div>
+`;
 
-      if (repos.length === 0) {
-        container.innerHTML = "<p>No public projects found yet.</p>";
+            container.appendChild(card);
+          });
+
+        if (repos.length === 0) {
+          container.innerHTML = "<p>No public projects found yet.</p>";
+        }
+      } catch (error) {
+        container.innerHTML = "<p>Error loading projects. Please try again later.</p>";
+        console.error(error);
       }
-    } catch (error) {
-      container.innerHTML = "<p>Error loading projects. Please try again later.</p>";
-      console.error(error);
     }
-  }
 
-  loadProjects();
-</script>
+    loadProjects();
+  </script>
 
 </body>
+
 </html>
