@@ -1,176 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Djamel Eddine Djouada | Cyberpunk Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
-</head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Djamel Eddine Djouada — Cyberpunk Portfolio</title>
 
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <!-- BOOT SEQUENCE -->
-  <div id="boot-screen">
-    <div class="boot-text">
-      <h1 class="glitch" data-text="BOOTING...">BOOTING...</h1>
-      <p>initializing neural network...</p>
-      <p>loading cybernetic modules...</p>
-      <p>establishing GitHub uplink...</p>
+  <!-- BOOT / TERMINAL SCREEN -->
+  <div id="boot-screen" aria-hidden="false">
+    <div class="boot-inner">
+      <pre id="boot-typing" class="boot-typing" aria-hidden="true"></pre>
+      <div class="boot-cursor">█</div>
     </div>
   </div>
 
-  <!-- PARTICLE BACKGROUND -->
-  <canvas id="matrix-bg"></canvas>
+  <!-- MATRIX PARTICLES (canvas) -->
+  <canvas id="matrix-bg" aria-hidden="true"></canvas>
 
-  <!-- MAIN CONTENT -->
-  <div id="main-content" style="display: none;">
-    <header class="neon-header">
-      <nav class="nav-bar">
-        <a href="https://github.com/therealdjamel" class="logo" target="_blank" title="View my GitHub">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Logo">
+  <!-- MAIN APP -->
+  <div id="app" class="app" style="display:none;">
+    <header class="topbar">
+      <nav class="nav">
+        <a class="logo" href="https://github.com/therealdjamel" target="_blank" rel="noopener" title="View my GitHub">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
         </a>
         <ul class="nav-links">
           <li><a href="#about">About</a></li>
           <li><a href="#skills">Skills</a></li>
+          <li><a href="#achievements">Achievements</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
-
-      <div class="hero">
-        <div class="profile-photo">
-          <img src="images/me.png" alt="Your photo">
-        </div>
-
-        <div class="hero-text">
-          <h1>Djamel Eddine Djouada</h1>
-          <h2><span class="glitch-text" data-text="Web Developer">Web Developer</span></h2>
-          <p>Crafting futuristic digital worlds with code and creativity.</p>
-          <a href="#projects" class="btn neon-btn">View My Work</a>
-        </div>
-      </div>
     </header>
 
     <main>
-      <section id="about" class="section">
-        <h2 class="section-title">About Me</h2>
-        <p>
-          I’m a passionate full-stack developer merging logic and aesthetics to create
-          smooth, responsive, and immersive experiences. I love pushing boundaries
-          where creativity meets code — blending human and machine design.
-        </p>
-      </section>
+      <!-- HERO -->
+      <section id="hero" class="hero">
+        <div class="hero-left">
+          <div class="avatar">
+            <img src="images/me.png" alt="Djamel Eddine Djouada">
+            <div class="avatar-glow"></div>
+          </div>
+        </div>
 
-      <section id="skills" class="section">
-        <h2 class="section-title">Skills</h2>
-        <div class="skills-grid">
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/><p>C++</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/><p>C</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/><p>Java</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"/><p>JavaScript</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"/><p>Python</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg"/><p>Swift</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg"/><p>PHP</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"/><p>HTML5</p></div>
-          <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"/><p>CSS3</p></div>
+        <div class="hero-right">
+          <h1 class="name glitch" data-text="Djamel Eddine Djouada">Djamel Eddine Djouada</h1>
+          <h2 class="role">Web Developer <span class="accent">•</span> Software Engineer</h2>
+          <p class="tagline">Crafting futuristic, responsive, and user-friendly web apps — straight from Night City to your browser.</p>
+          <div class="hero-ctas">
+            <a href="#projects" class="btn neon">View My Work</a>
+            <a href="https://github.com/therealdjamel" class="btn ghost" target="_blank" rel="noopener">GitHub</a>
+          </div>
         </div>
       </section>
 
-      <section id="projects" class="section">
-        <h2 class="section-title">Projects</h2>
+      <!-- ABOUT -->
+      <section id="about" class="card section about">
+        <h3 class="card-title">About</h3>
+        <p>
+          I'm a full-stack developer who blends logic and art to build immersive digital experiences.
+          I enjoy working with modern languages and frameworks, architecting clean code and polished UI.
+        </p>
+      </section>
+
+      <!-- SKILLS: neon chip style -->
+      <section id="skills" class="card section skills">
+        <h3 class="card-title">Skills</h3>
+        <div class="chips-grid">
+          <!-- Each chip uses an icon + label -->
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C icon">
+            <span>C</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++">
+            <span>C++</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+            <span>Java</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS">
+            <span>JavaScript</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+            <span>Python</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" alt="Swift">
+            <span>Swift</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
+            <span>PHP</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+            <span>HTML5</span>
+          </div>
+          <div class="chip">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
+            <span>CSS3</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACHIEVEMENTS -->
+      <section id="achievements" class="card section achievements">
+        <h3 class="card-title">Achievements</h3>
+        <div class="ach-grid">
+          <article class="achievement">
+            <div class="badge">🎓</div>
+            <div class="ach-body">
+              <h4>Bachelor — Computer Science</h4>
+              <p>Ferhat Abbas University • 2021 – 2024</p>
+            </div>
+          </article>
+
+          <article class="achievement">
+            <div class="badge">🛒</div>
+            <div class="ach-body">
+              <h4>Creator & Designer</h4>
+              <p><strong>PilyouPassion Store</strong> — storefront design, UX & frontend.</p>
+            </div>
+          </article>
+
+          <article class="achievement">
+            <div class="badge">🏥</div>
+            <div class="ach-body">
+              <h4>Founder</h4>
+              <p><strong>Karkar Eye Center Software</strong> — clinic management & prescriptions.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- PROJECTS (keeps your GitHub loader) -->
+      <section id="projects" class="card section projects">
+        <h3 class="card-title">Projects</h3>
         <div id="projects-container" class="projects-container">
           <p class="loading-text">Loading your projects...</p>
         </div>
       </section>
 
-      <section id="contact" class="section">
-        <h2 class="section-title">Contact</h2>
-        <p>Interested in working together? Let’s build something amazing.</p>
-        <a href="mailto:Djamel19.Dj@gmail.com" class="btn neon-btn">Say Hello</a>
+      <!-- CONTACT -->
+      <section id="contact" class="card section contact">
+        <h3 class="card-title">Contact</h3>
+        <p>If you'd like to work together or say hi, send a message — I respond quickly.</p>
+        <a class="btn neon" href="mailto:Djamel19.Dj@gmail.com">Say Hello</a>
       </section>
+
     </main>
 
-    <footer>
-      <p>© 2025 therealdjamel | Designed in a <span class="cyberpunk">Cyberpunk</span> universe.</p>
+    <footer class="footer">
+      <p>© 2025 therealdjamel — built with neon circuits and stubborn optimism.</p>
     </footer>
   </div>
 
+  <!-- SCRIPTS: typing boot + matrix + github loader -->
   <script>
-    /* === Boot Sequence === */
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        document.getElementById("boot-screen").classList.add("fade-out");
-        setTimeout(() => {
-          document.getElementById("boot-screen").style.display = "none";
-          document.getElementById("main-content").style.display = "block";
-        }, 800);
-      }, 2600);
+    /* ------------------------------
+       Boot typing effect (lines)
+       ------------------------------*/
+    const bootLines = [
+      "SYSTEM: INIT v7.9.2",
+      "MODULE: NEURAL UI LOADED",
+      "CORE: GRAPHICS DRIVER — OK",
+      "NETWORK: ESTABLISHING GITHUB UPLINK",
+      "SECURE: AUTH CHECK — ANON",
+      "LAUNCH: DJAMEL PORTFOLIO — BOOTING"
+    ];
+
+    const typingEl = document.getElementById('boot-typing');
+    const cursorEl = document.querySelector('.boot-cursor');
+
+    async function typeLines(lines, el, delayBetweenLines = 450) {
+      for (const line of lines) {
+        await typeLine(line, el);
+        el.innerHTML += '\n';
+        await wait(delayBetweenLines);
+      }
+    }
+
+    function typeLine(text, el) {
+      return new Promise(resolve => {
+        let i = 0;
+        const interval = setInterval(() => {
+          el.textContent += text[i++];
+          if (i === text.length) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 28); // typing speed
+      });
+    }
+
+    function wait(ms) { return new Promise(res => setTimeout(res, ms)); }
+
+    window.addEventListener('load', async () => {
+      // Run typing animation then fade into site
+      await typeLines(bootLines, typingEl, 380);
+      // small pause
+      await wait(600);
+      // blink cursor faster then fade out
+      cursorEl.style.animation = 'blink-fast 0.4s steps(1) infinite';
+      await wait(700);
+      document.getElementById('boot-screen').classList.add('boot-hide');
+      await wait(700);
+      document.getElementById('boot-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
     });
 
-    /* === GitHub Project Loader === */
-    const username = "therealdjamel";
+    /* ------------------------------
+       Matrix background (simple)
+       ------------------------------*/
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    let cols, fontSize, drops;
+
+    function initMatrix() {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+      fontSize = 14;
+      cols = Math.floor(canvas.width / fontSize);
+      drops = Array(cols).fill(1);
+    }
+    function drawMatrix() {
+      if (!ctx) return;
+      ctx.fillStyle = "rgba(0,0,0,0.08)";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = "#007ea8";
+      ctx.font = fontSize + "px monospace";
+      for (let i =0;i<drops.length;i++){
+        const text = Math.random() > 0.9 ? '01' : (Math.random() > 0.6 ? '0' : '1');
+        ctx.fillText(text.charAt(Math.floor(Math.random()*text.length)), i*fontSize, drops[i]*fontSize);
+        if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i]=0;
+        drops[i]++;
+      }
+    }
+    initMatrix();
+    setInterval(drawMatrix, 40);
+    addEventListener('resize', () => { initMatrix(); });
+
+    /* ------------------------------
+       GitHub repo loader (preserved)
+       ------------------------------*/
+    const username = "therealdjamel"; // keep your username here
+
     async function loadProjects() {
       const container = document.getElementById("projects-container");
       try {
         const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
         const repos = await res.json();
+
         container.innerHTML = "";
 
-        repos.filter(r => !r.fork && !r.archived && r.name.toLowerCase() !== `${username}.github.io`)
+        repos
+          .filter(repo => !repo.fork && !repo.archived && repo.name.toLowerCase() !== `${username}.github.io`)
           .slice(0, 6)
           .forEach(repo => {
             const card = document.createElement("div");
             card.classList.add("project-card");
             card.innerHTML = `
-              <div class="project-image">
-                <img src="images/projects/${repo.name}.png" alt="${repo.name}">
-              </div>
-              <div class="project-info">
-                <h3>${repo.name}</h3>
-                <p>${repo.description || "No description provided."}</p>
-                <div class="card-buttons">
-                  <a href="${repo.html_url}" class="btn neon-btn" target="_blank">Source</a>
-                  ${repo.homepage ? `<a href="${repo.homepage}" class="btn neon-btn" target="_blank">Live Demo</a>` : ""}
-                  <a href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" class="btn neon-btn" target="_blank">ZIP</a>
+              <div class="project-image"><img src="images/projects/${repo.name}.png" alt="${repo.name} preview"></div>
+              <div class="project-body">
+                <h4>${repo.name}</h4>
+                <p>${repo.description || 'No description provided.'}</p>
+                <div class="project-actions">
+                  <a class="btn neon small" href="${repo.html_url}" target="_blank" rel="noopener">Source</a>
+                  ${repo.homepage ? `<a class="btn neon small" href="${repo.homepage}" target="_blank" rel="noopener">Live</a>` : ""}
+                  <a class="btn ghost small" href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" target="_blank" rel="noopener">ZIP</a>
                 </div>
-              </div>`;
+              </div>
+            `;
             container.appendChild(card);
           });
-      } catch (err) {
-        console.error(err);
-        container.innerHTML = "<p>Error loading projects.</p>";
+
+        if (repos.length === 0) {
+          container.innerHTML = "<p class='muted'>No public projects found.</p>";
+        }
+      } catch (error) {
+        console.error(error);
+        container.innerHTML = "<p class='muted'>Error loading projects.</p>";
       }
     }
-    loadProjects();
 
-    /* === Matrix Background === */
-    const canvas = document.getElementById("matrix-bg");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-    const chars = "01";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#00eaff";
-      ctx.font = fontSize + "px monospace";
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars.charAt(Math.floor(Math.random() * chars.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-    }
-    setInterval(drawMatrix, 33);
-    window.addEventListener("resize", () => {
-      canvas.height = window.innerHeight;
-      canvas.width = window.innerWidth;
+    // Start loader after the app shows
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') loadProjects();
     });
+    // also call after a small delay when app is visible
+    setTimeout(() => { if (document.getElementById('app').style.display === 'block') loadProjects(); }, 1200);
+
   </script>
 </body>
 </html>

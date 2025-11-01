@@ -1,214 +1,115 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background-color: #0b0d11;
-  color: #e6e6e6;
-  font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
+/* ---------------------------
+   Cyberpunk 2077 — style.css
+   --------------------------- */
+:root{
+  --bg:#05060a;
+  --panel: rgba(255,255,255,0.03);
+  --neon-blue: #00eaff;
+  --neon-yellow: #ffdb00;
+  --muted: rgba(230,230,230,0.65);
+  --glass: rgba(255,255,255,0.02);
 }
 
-/* === BOOT SCREEN === */
-#boot-screen {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  color: #00eaff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 9999;
-  text-align: center;
-  font-family: 'Orbitron', sans-serif;
-}
-.boot-text h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-.boot-text p {
-  font-size: 0.9rem;
-  opacity: 0.7;
-  animation: blink 1.4s infinite;
-}
-@keyframes blink {
-  50% { opacity: 0.3; }
-}
-.fade-out { animation: fadeOut 0.8s forwards; }
-@keyframes fadeOut {
-  to { opacity: 0; visibility: hidden; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:#e7e7e7;
+  font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
 }
 
-/* === MATRIX BACKGROUND === */
-#matrix-bg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: #000;
+/* ---------- BOOT SCREEN ---------- */
+#boot-screen{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:#000;z-index:99999;color:var(--neon-blue);font-family:"Orbitron",monospace;
 }
+.boot-inner{display:flex;align-items:center;gap:12px;flex-direction:column;text-align:left}
+.boot-typing{white-space:pre-wrap;font-size:15px;line-height:1.35;opacity:0.95}
+.boot-cursor{font-size:18px;margin-left:2px;animation: blink 1s steps(2) infinite;color:var(--neon-blue)}
+@keyframes blink{50%{opacity:0}}
+@keyframes blink-fast{50%{opacity:0}}
+.boot-hide{animation:bootFade .7s ease forwards}
+@keyframes bootFade{to{opacity:0;visibility:hidden}}
 
-/* === NAVBAR === */
-.neon-header {
-  border-bottom: 2px solid #00eaff;
-  padding: 20px 50px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-}
-.nav-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.logo img {
-  width: 50px;
-  transition: 0.3s;
-}
-.logo img:hover {
-  filter: drop-shadow(0 0 10px #00eaff);
-}
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-}
-.nav-links a {
-  font-weight: 600;
-  color: #00eaff;
-  transition: 0.3s;
-}
-.nav-links a:hover {
-  color: #ffdb00;
-  text-shadow: 0 0 10px #ffdb00;
-}
+/* ---------- MATRIX CANVAS ---------- */
+#matrix-bg{position:fixed;inset:0;z-index:1;mix-blend-mode:screen;opacity:0.14;pointer-events:none}
 
-/* === HERO === */
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 60px 20px;
-  animation: fadeIn 1.2s ease forwards;
-}
-.profile-photo img {
-  width: 150px;
-  border-radius: 50%;
-  border: 3px solid #00eaff;
-  box-shadow: 0 0 20px #00eaff;
-  margin-bottom: 20px;
-}
-.hero-text h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
-  color: #ffdb00;
-  text-shadow: 0 0 10px #ffdb00;
-}
-.hero-text h2 {
-  color: #00eaff;
-  margin: 10px 0;
-}
-.glitch-text::before, .glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  opacity: 0.7;
-}
-.glitch-text::before { color: #ffdb00; transform: translate(-2px, 0); }
-.glitch-text::after { color: #00eaff; transform: translate(2px, 0); }
+/* ---------- APP LAYOUT ---------- */
+.app{position:relative;z-index:5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{border-bottom:1px solid rgba(0,0,0,0.35);padding:18px 48px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo img{width:46px;filter:drop-shadow(0 0 10px var(--neon-blue))}
+.nav-links{list-style:none;display:flex;gap:22px}
+.nav-links a{color:var(--neon-blue);font-weight:600;text-decoration:none;transition:all .18s}
+.nav-links a:hover{color:var(--neon-yellow);text-shadow:0 0 8px var(--neon-yellow)}
 
-/* === BUTTON === */
-.neon-btn {
-  border: 2px solid #00eaff;
-  color: #00eaff;
-  padding: 10px 25px;
-  border-radius: 25px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: 0.3s;
-  display: inline-block;
-  margin-top: 15px;
-}
-.neon-btn:hover {
-  background: #00eaff;
-  color: #0b0d11;
-  box-shadow: 0 0 15px #00eaff;
-}
+/* ---------- HERO ---------- */
+.hero{display:flex;gap:28px;align-items:center;padding:46px 7vw 32px;min-height:260px}
+.hero-left{flex:0 0 180px}
+.avatar{position:relative;width:160px;height:160px;border-radius:12px;overflow:hidden;border:2px solid rgba(0,0,0,0.5)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(10%) contrast(1.02)}
+.avatar-glow{position:absolute;inset:0;box-shadow:0 0 40px 6px rgba(0,234,255,0.08), inset 0 0 20px rgba(255,219,0,0.03);pointer-events:none}
+.hero-right{flex:1}
+.name{font-family:"Orbitron",sans-serif;font-size:30px;color:var(--neon-yellow);text-shadow:0 0 12px rgba(255,219,0,0.85)}
+.role{margin-top:6px;color:var(--neon-blue);font-weight:600}
+.tagline{margin-top:12px;color:var(--muted);max-width:780px}
 
-/* === SECTIONS === */
-.section {
-  padding: 80px 10%;
-  text-align: center;
-  background: rgba(10,10,10,0.7);
-  margin: 20px 0;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-.section-title {
-  font-family: 'Orbitron', sans-serif;
-  color: #ffdb00;
-  margin-bottom: 40px;
-  text-shadow: 0 0 10px #ffdb00;
-}
+/* buttons */
+.btn{display:inline-block;padding:10px 18px;border-radius:100px;font-weight:700;text-decoration:none;letter-spacing:0.6px}
+.btn.neon{border:2px solid var(--neon-blue);color:var(--neon-blue);background:transparent;transition:all .18s}
+.btn.neon:hover{background:var(--neon-blue);color:#071017;box-shadow:0 0 18px var(--neon-blue)}
+.btn.ghost{border:1px dashed rgba(255,255,255,0.06);color:var(--muted);background:transparent}
+.btn.small{padding:7px 10px;font-size:13px}
 
-/* === SKILLS === */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 25px;
+/* ---------- CARDS / SECTIONS ---------- */
+main{padding:28px 7vw 60px}
+.section{margin:20px 0}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  border:1px solid rgba(0,234,255,0.08);
+  padding:22px;border-radius:12px;box-shadow:0 6px 26px rgba(2,6,12,0.6);
 }
-.skill-card {
-  border: 1px solid #00eaff;
-  border-radius: 15px;
-  padding: 20px;
-  transition: 0.3s;
-  background: rgba(255,255,255,0.05);
-}
-.skill-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #00eaff;
-}
-.skill-card img {
-  width: 50px;
-}
-.skill-card p {
-  margin-top: 10px;
-  color: #ffdb00;
-  font-weight: 500;
-}
+.card-title{font-family:"Orbitron";color:var(--neon-yellow);margin-bottom:14px;font-size:18px}
 
-/* === PROJECTS === */
-.projects-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+/* ---------- SKILLS CHIPS ---------- */
+.chips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px}
+.chip{
+  display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06));
+  border:1px solid rgba(0,234,255,0.08);backdrop-filter: blur(4px);
+  transition:transform .16s,box-shadow .16s;
 }
-.project-card {
-  background: rgba(255,255,255,0.05);
-  border: 2px solid #00eaff;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: 0.3s;
-}
-.project-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 20px #00eaff;
-}
-.project-image img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-.project-info { padding: 20px; }
-.card-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 15px;
-}
+.chip img{width:38px;height:38px;filter:drop-shadow(0 0 8px rgba(0,234,255,0.12))}
+.chip span{font-weight:600;color:var(--neon-yellow)}
+.chip:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,234,255,0.06)}
 
-/* === FOOTER === */
-footer {
-  text-align: center;
-  padding: 20px;
-  border-top: 2px solid #00eaff;
-}
-.cyberpunk { color: #ffdb00; }
+/* ---------- ACHIEVEMENTS ---------- */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.achievement{display:flex;align-items:center;gap:14px;padding:12px;border-radius:10px;background:var(--panel);border:1px solid rgba(255,219,0,0.06)}
+.badge{font-size:28px;display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:10px;background:linear-gradient(180deg, rgba(255,219,0,0.08), rgba(255,219,0,0.02));box-shadow:0 6px 18px rgba(255,219,0,0.03)}
+.ach-body h4{color:var(--neon-blue);margin-bottom:6px}
+.ach-body p{color:var(--muted);font-size:14px}
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* ---------- PROJECTS ---------- */
+.projects-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.project-card{display:flex;flex-direction:column;border-radius:10px;overflow:hidden;border:1px solid rgba(0,234,255,0.06);background:var(--panel)}
+.project-image img{width:100%;height:160px;object-fit:cover;display:block}
+.project-body{padding:14px}
+.project-body h4{color:var(--neon-yellow);margin-bottom:6px;font-size:16px}
+.project-body p{color:var(--muted);font-size:14px}
+.project-actions{margin-top:12px;display:flex;gap:10px}
+
+/* ---------- CONTACT / FOOTER ---------- */
+.contact .btn{margin-top:12px}
+.footer{padding:18px 7vw;text-align:center;border-top:1px solid rgba(0,0,0,0.25);color:var(--muted);font-size:14px}
+
+/* ---------- UTILITIES ---------- */
+.muted{color:var(--muted);text-align:center}
+@media (max-width:880px){
+  .hero{flex-direction:column;align-items:center;text-align:center}
+  .hero-left{order:0}
+  .nav-links{display:none}
+}
