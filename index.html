@@ -293,14 +293,7 @@
         container.innerHTML = "<p class='muted'>Error loading projects.</p>";
       }
     }
-
-    // Start loader after the app shows
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') loadProjects();
-    });
-    // also call after a small delay when app is visible
-    setTimeout(() => { if (document.getElementById('app').style.display === 'block') loadProjects(); }, 1200);
-
+loadProjects();
   </script>
 </body>
 </html>
