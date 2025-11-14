@@ -7,9 +7,147 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ---------------------------
+   Cyberpunk 2077 — style.css
+   --------------------------- */
+:root{
+  --bg:#05060a;
+  --panel: rgba(255,255,255,0.03);
+  --neon-blue: #00eaff;
+  --neon-yellow: #ffdb00;
+  --muted: rgba(230,230,230,0.65);
+  --glass: rgba(255,255,255,0.02);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:#e7e7e7;
+  font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* ---------- BOOT SCREEN ---------- */
+#boot-screen{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:#000;z-index:99999;color:var(--neon-blue);font-family:"Orbitron",monospace;
+}
+.boot-inner{display:flex;align-items:center;gap:12px;flex-direction:column;text-align:left}
+.boot-typing{white-space:pre-wrap;font-size:15px;line-height:1.35;opacity:0.95}
+.boot-cursor{font-size:18px;margin-left:2px;animation: blink 1s steps(2) infinite;color:var(--neon-blue)}
+@keyframes blink{50%{opacity:0}}
+@keyframes blink-fast{50%{opacity:0}}
+.boot-hide{animation:bootFade .7s ease forwards}
+@keyframes bootFade{to{opacity:0;visibility:hidden}}
+
+/* ---------- MATRIX CANVAS ---------- */
+#matrix-bg{position:fixed;inset:0;z-index:1;mix-blend-mode:screen;opacity:0.14;pointer-events:none}
+
+/* ---------- APP LAYOUT ---------- */
+.app{position:relative;z-index:5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{border-bottom:1px solid rgba(0,0,0,0.35);padding:18px 48px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo img{width:46px;filter:drop-shadow(0 0 10px var(--neon-blue))}
+.nav-links{list-style:none;display:flex;gap:22px}
+.nav-links a{color:var(--neon-blue);font-weight:600;text-decoration:none;transition:all .18s}
+.nav-links a:hover{color:var(--neon-yellow);text-shadow:0 0 8px var(--neon-yellow)}
+
+/* ---------- HERO ---------- */
+.hero{display:flex;gap:28px;align-items:center;padding:46px 7vw 32px;min-height:260px}
+.hero-left{flex:0 0 180px}
+.avatar{position:relative;width:160px;height:160px;border-radius:12px;overflow:hidden;border:2px solid rgba(0,0,0,0.5)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(10%) contrast(1.02)}
+.avatar-glow{position:absolute;inset:0;box-shadow:0 0 40px 6px rgba(0,234,255,0.08), inset 0 0 20px rgba(255,219,0,0.03);pointer-events:none}
+.hero-right{flex:1}
+.name{font-family:"Orbitron",sans-serif;font-size:30px;color:var(--neon-yellow);text-shadow:0 0 12px rgba(255,219,0,0.85)}
+.role{margin-top:6px;color:var(--neon-blue);font-weight:600}
+.tagline{margin-top:12px;color:var(--muted);max-width:780px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:100px;font-weight:700;text-decoration:none;letter-spacing:0.6px;transition:all .18s}
+.btn.neon{border:2px solid var(--neon-blue);color:var(--neon-blue);background:transparent}
+.btn.neon:hover{background:var(--neon-blue);color:#071017;box-shadow:0 0 18px var(--neon-blue)}
+.btn.ghost{border:1px dashed rgba(255,255,255,0.06);color:var(--muted);background:transparent}
+.btn.small{padding:7px 10px;font-size:13px}
+.btn i {font-size: 14px;}
+
+/* ---------- CARDS / SECTIONS ---------- */
+main{padding:28px 7vw 60px}
+.section{margin:20px 0}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  border:1px solid rgba(0,234,255,0.08);
+  padding:22px;border-radius:12px;box-shadow:0 6px 26px rgba(2,6,12,0.6);
+}
+.card-title{font-family:"Orbitron";color:var(--neon-yellow);margin-bottom:14px;font-size:18px}
+
+/* ---------- SKILLS CHIPS ---------- */
+.chips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px}
+.chip{
+  display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06));
+  border:1px solid rgba(0,234,255,0.08);backdrop-filter: blur(4px);
+  transition:transform .16s,box-shadow .16s;
+}
+.chip img{width:38px;height:38px;filter:drop-shadow(0 0 8px rgba(0,234,255,0.12))}
+.chip span{font-weight:600;color:var(--neon-yellow)}
+.chip:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,234,255,0.06)}
+
+/* ---------- ACHIEVEMENTS ---------- */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.achievement{display:flex;align-items:center;gap:14px;padding:12px;border-radius:10px;background:var(--panel);border:1px solid rgba(255,219,0,0.06)}
+.badge{font-size:28px;display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:10px;background:linear-gradient(180deg, rgba(255,219,0,0.08), rgba(255,219,0,0.02));box-shadow:0 6px 18px rgba(255,219,0,0.03)}
+.ach-body h4{color:var(--neon-blue);margin-bottom:6px}
+.ach-body p{color:var(--muted);font-size:14px}
+
+/* ---------- PROJECTS ---------- */
+.projects-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.project-card{display:flex;flex-direction:column;border-radius:10px;overflow:hidden;border:1px solid rgba(0,234,255,0.06);background:var(--panel);transition:transform .2s, box-shadow .2s;}
+.project-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,234,255,0.1);}
+
+.project-media{width:100%;position:relative;overflow:hidden;background:rgba(0,0,0,0.2);}
+.project-media img, .project-media video{width:100%;height:auto;display:block;object-fit:cover;max-height:220px;}
+.project-media .media-placeholder{width:100%;height:200px;display:flex;align-items:center;justify-content:center;color:var(--muted);background:rgba(0,0,0,0.1);font-size:14px;}
+
+.project-body{padding:14px;flex-grow:1;display:flex;flex-direction:column;}
+.project-body h4{color:var(--neon-yellow);margin-bottom:6px;font-size:16px}
+.project-body p{color:var(--muted);font-size:14px;margin-bottom:12px;flex-grow:1;}
+
+.project-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.project-actions .btn{justify-content:center;}
+
+/* Modal for render preview */
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;visibility:hidden;transition:opacity 0.3s, visibility 0.3s;}
+.modal.active{opacity:1;visibility:visible;}
+.modal-content{max-width:90%;max-height:90%;position:relative;}
+.modal-content img, .modal-content video{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 0 30px rgba(0,234,255,0.3);}
+.modal-close{position:absolute;top:-40px;right:0;background:none;border:none;color:var(--neon-blue);font-size:24px;cursor:pointer;transition:color 0.2s;}
+.modal-close:hover{color:var(--neon-yellow);}
+
+/* ---------- CONTACT / FOOTER ---------- */
+.contact .btn{margin-top:12px}
+.footer{padding:18px 7vw;text-align:center;border-top:1px solid rgba(0,0,0,0.25);color:var(--muted);font-size:14px}
+
+/* ---------- UTILITIES ---------- */
+.muted{color:var(--muted);text-align:center}
+@media (max-width:880px){
+  .hero{flex-direction:column;align-items:center;text-align:center}
+  .hero-left{order:0}
+  .nav-links{display:none}
+}
+@media (max-width: 600px) {
+  .project-actions{grid-template-columns:1fr;}
+}
+  </style>
 </head>
 <body>
   <!-- BOOT / TERMINAL SCREEN -->
@@ -22,6 +160,14 @@
 
   <!-- MATRIX PARTICLES (canvas) -->
   <canvas id="matrix-bg" aria-hidden="true"></canvas>
+
+  <!-- Render Preview Modal -->
+  <div id="render-modal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close"><i class="fas fa-times"></i></button>
+      <div id="modal-media"></div>
+    </div>
+  </div>
 
   <!-- MAIN APP -->
   <div id="app" class="app" style="display:none;">
@@ -143,7 +289,7 @@
         </div>
       </section>
 
-      <!-- PROJECTS (keeps your GitHub loader) -->
+      <!-- PROJECTS (enhanced with media and buttons) -->
       <section id="projects" class="card section projects">
         <h3 class="card-title">Projects</h3>
         <div id="projects-container" class="projects-container">
@@ -171,12 +317,7 @@
        Boot typing effect (lines)
        ------------------------------*/
     const bootLines = [
-      "SYSTEM: INIT v7.9.2",
-      "MODULE: NEURAL UI LOADED",
-      "CORE: GRAPHICS DRIVER — OK",
-      "NETWORK: ESTABLISHING GITHUB UPLINK",
-      "SECURE: AUTH CHECK — ANON",
-      "LAUNCH: DJAMEL PORTFOLIO — BOOTING"
+      "BOOTING: DJAMEL PORTFOLIO — [██████████] 100%"
     ];
 
     const typingEl = document.getElementById('boot-typing');
@@ -251,9 +392,69 @@
     addEventListener('resize', () => { initMatrix(); });
 
     /* ------------------------------
-       GitHub repo loader (preserved)
+       GitHub repo loader (enhanced)
        ------------------------------*/
     const username = "therealdjamel"; // keep your username here
+    const modal = document.getElementById('render-modal');
+    const modalMedia = document.getElementById('modal-media');
+    const modalClose = document.querySelector('.modal-close');
+
+    // Function to show render in modal
+    function showRender(mediaUrl, mediaType) {
+      modalMedia.innerHTML = '';
+      
+      if (mediaType === 'image' || mediaType === 'gif') {
+        const img = document.createElement('img');
+        img.src = mediaUrl;
+        img.alt = 'Project render';
+        modalMedia.appendChild(img);
+      } else if (mediaType === 'video') {
+        const video = document.createElement('video');
+        video.src = mediaUrl;
+        video.controls = true;
+        video.autoplay = true;
+        modalMedia.appendChild(video);
+      }
+      
+      modal.classList.add('active');
+    }
+
+    // Close modal
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+      // Stop any playing videos
+      const video = modalMedia.querySelector('video');
+      if (video) {
+        video.pause();
+      }
+    });
+
+    // Close modal when clicking outside content
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        // Stop any playing videos
+        const video = modalMedia.querySelector('video');
+        if (video) {
+          video.pause();
+        }
+      }
+    });
+
+    // Function to check if a file exists in the repository
+    async function checkFileExists(repoName, fileName) {
+      try {
+        const response = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/${fileName}`);
+        return response.ok;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    // Function to get file URL
+    function getFileUrl(repoName, fileName) {
+      return `https://raw.githubusercontent.com/${username}/${repoName}/main/${fileName}`;
+    }
 
     async function loadProjects() {
       const container = document.getElementById("projects-container");
@@ -263,26 +464,109 @@
 
         container.innerHTML = "";
 
-        repos
+        // Process each repository
+        const projectPromises = repos
           .filter(repo => !repo.fork && !repo.archived && repo.name.toLowerCase() !== `${username}.github.io`)
           .slice(0, 6)
-          .forEach(repo => {
-            const card = document.createElement("div");
-            card.classList.add("project-card");
-            card.innerHTML = `
-              <div class="project-image"><img src="images/projects/${repo.name}.png" alt="${repo.name} preview"></div>
-              <div class="project-body">
-                <h4>${repo.name}</h4>
-                <p>${repo.description || 'No description provided.'}</p>
-                <div class="project-actions">
-                  <a class="btn neon small" href="${repo.html_url}" target="_blank" rel="noopener">Source</a>
-                  ${repo.homepage ? `<a class="btn neon small" href="${repo.homepage}" target="_blank" rel="noopener">Live</a>` : ""}
-                  <a class="btn ghost small" href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" target="_blank" rel="noopener">ZIP</a>
-                </div>
-              </div>
-            `;
-            container.appendChild(card);
+          .map(async repo => {
+            // Check for render files
+            const hasRenderPng = await checkFileExists(repo.name, 'render.png');
+            const hasRenderMp4 = await checkFileExists(repo.name, 'render.mp4');
+            const hasRenderGif = await checkFileExists(repo.name, 'render.gif');
+            const hasReport = await checkFileExists(repo.name, 'report.pdf');
+            
+            // Determine media type and URL
+            let mediaType = 'none';
+            let mediaUrl = '';
+            
+            if (hasRenderPng) {
+              mediaType = 'image';
+              mediaUrl = getFileUrl(repo.name, 'render.png');
+            } else if (hasRenderMp4) {
+              mediaType = 'video';
+              mediaUrl = getFileUrl(repo.name, 'render.mp4');
+            } else if (hasRenderGif) {
+              mediaType = 'gif';
+              mediaUrl = getFileUrl(repo.name, 'render.gif');
+            }
+            
+            const reportUrl = hasReport ? getFileUrl(repo.name, 'report.pdf') : '';
+            
+            return {
+              repo,
+              mediaType,
+              mediaUrl,
+              hasReport,
+              reportUrl
+            };
           });
+        
+        // Wait for all file checks to complete
+        const projects = await Promise.all(projectPromises);
+        
+        // Create project cards
+        projects.forEach(project => {
+          const { repo, mediaType, mediaUrl, hasReport, reportUrl } = project;
+          
+          const card = document.createElement("div");
+          card.classList.add("project-card");
+          
+          let mediaContent = '';
+          if (mediaType !== 'none') {
+            if (mediaType === 'image' || mediaType === 'gif') {
+              mediaContent = `<img src="${mediaUrl}" alt="${repo.name} render" loading="lazy">`;
+            } else if (mediaType === 'video') {
+              mediaContent = `<video muted loop><source src="${mediaUrl}" type="video/mp4">Your browser does not support the video tag.</video>`;
+            }
+          } else {
+            mediaContent = `<div class="media-placeholder">No render available</div>`;
+          }
+          
+          card.innerHTML = `
+            <div class="project-media">
+              ${mediaContent}
+            </div>
+            <div class="project-body">
+              <h4>${repo.name}</h4>
+              <p>${repo.description || 'No description provided.'}</p>
+              <div class="project-actions">
+                <a class="btn neon small" href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" target="_blank" rel="noopener">
+                  <i class="fas fa-download"></i> Download
+                </a>
+                <a class="btn neon small" href="${repo.html_url}" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i> Repository
+                </a>
+                ${mediaType !== 'none' ? 
+                  `<button class="btn neon small view-render" data-url="${mediaUrl}" data-type="${mediaType}">
+                    <i class="fas fa-play"></i> Render
+                  </button>` : 
+                  `<button class="btn neon small" disabled>
+                    <i class="fas fa-play"></i> No Render
+                  </button>`
+                }
+                ${hasReport ? 
+                  `<a class="btn neon small" href="${reportUrl}" target="_blank" rel="noopener">
+                    <i class="fas fa-file-pdf"></i> Report
+                  </a>` : 
+                  `<button class="btn neon small" disabled>
+                    <i class="fas fa-file-pdf"></i> No Report
+                  </button>`
+                }
+              </div>
+            </div>
+          `;
+          
+          container.appendChild(card);
+        });
+
+        // Add event listeners to render buttons
+        document.querySelectorAll('.view-render').forEach(button => {
+          button.addEventListener('click', () => {
+            const mediaUrl = button.getAttribute('data-url');
+            const mediaType = button.getAttribute('data-type');
+            showRender(mediaUrl, mediaType);
+          });
+        });
 
         if (repos.length === 0) {
           container.innerHTML = "<p class='muted'>No public projects found.</p>";
@@ -292,7 +576,8 @@
         container.innerHTML = "<p class='muted'>Error loading projects.</p>";
       }
     }
-loadProjects();
+    
+    loadProjects();
   </script>
 </body>
 </html>
