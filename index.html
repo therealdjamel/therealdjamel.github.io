@@ -111,10 +111,10 @@ main{padding:28px 7vw 60px}
 
 /* ---------- PROJECTS ---------- */
 .projects-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
-.project-card{display:flex;flex-direction:column;border-radius:10px;overflow:hidden;border:1px solid rgba(0,234,255,0.06);background:var(--panel);transition:transform .2s, box-shadow .2s;}
+.project-card{display:flex;flex-direction:column;border-radius:10px;overflow:hidden;border:1px solid rgba(0,234,255,0.06);background:var(--panel);transition:transform .2s, box-shadow .2s;height: fit-content;}
 .project-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,234,255,0.1);}
 
-.project-media{width:100%;position:relative;overflow:hidden;background:rgba(0,0,0,0.2);height:220px;}
+.project-media{width:100%;position:relative;overflow:hidden;background:rgba(0,0,0,0.2);height:180px;}
 .project-media img, .project-media video{width:100%;height:100%;display:block;object-fit:cover;}
 .project-media .media-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);background:rgba(0,0,0,0.1);font-size:14px;}
 
@@ -166,14 +166,6 @@ main{padding:28px 7vw 60px}
     <div class="modal-content">
       <button class="modal-close"><i class="fas fa-times"></i></button>
       <div id="modal-media"></div>
-    </div>
-  </div>
-
-  <!-- Report Preview Modal -->
-  <div id="report-modal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close"><i class="fas fa-times"></i></button>
-      <iframe id="report-frame" style="width: 80vw; height: 80vh; border: none; border-radius: 8px;"></iframe>
     </div>
   </div>
 
@@ -403,11 +395,9 @@ main{padding:28px 7vw 60px}
        GitHub repo loader (enhanced)
        ------------------------------*/
     const username = "therealdjamel"; // keep your username here
-    const renderModal = document.getElementById('render-modal');
+    const modal = document.getElementById('render-modal');
     const modalMedia = document.getElementById('modal-media');
-    const modalClose = document.querySelectorAll('.modal-close');
-    const reportModal = document.getElementById('report-modal');
-    const reportFrame = document.getElementById('report-frame');
+    const modalClose = document.querySelector('.modal-close');
 
     // Function to show render in modal
     function showRender(mediaUrl, mediaType) {
@@ -426,44 +416,29 @@ main{padding:28px 7vw 60px}
         modalMedia.appendChild(video);
       }
       
-      renderModal.classList.add('active');
+      modal.classList.add('active');
     }
 
-    // Function to show report in modal
-    function showReport(reportUrl) {
-      reportFrame.src = reportUrl;
-      reportModal.classList.add('active');
-    }
+    // Close modal
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+      // Stop any playing videos
+      const video = modalMedia.querySelector('video');
+      if (video) {
+        video.pause();
+      }
+    });
 
-    // Close modals
-    modalClose.forEach(closeBtn => {
-      closeBtn.addEventListener('click', () => {
-        renderModal.classList.remove('active');
-        reportModal.classList.remove('active');
+    // Close modal when clicking outside content
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
         // Stop any playing videos
         const video = modalMedia.querySelector('video');
         if (video) {
           video.pause();
         }
-        // Clear report frame
-        reportFrame.src = '';
-      });
-    });
-
-    // Close modals when clicking outside content
-    [renderModal, reportModal].forEach(modal => {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          modal.classList.remove('active');
-          // Stop any playing videos
-          const video = modalMedia.querySelector('video');
-          if (video) {
-            video.pause();
-          }
-          // Clear report frame
-          reportFrame.src = '';
-        }
-      });
+      }
     });
 
     // Function to check if a file exists in the repository
@@ -479,6 +454,11 @@ main{padding:28px 7vw 60px}
     // Function to get file URL
     function getFileUrl(repoName, fileName) {
       return `https://raw.githubusercontent.com/${username}/${repoName}/main/${fileName}`;
+    }
+
+    // Function to get GitHub PDF viewer URL
+    function getPdfViewerUrl(repoName, fileName) {
+      return `https://github.com/${username}/${repoName}/blob/main/${fileName}`;
     }
 
     async function loadProjects() {
@@ -515,7 +495,7 @@ main{padding:28px 7vw 60px}
               mediaUrl = getFileUrl(repo.name, 'render.gif');
             }
             
-            const reportUrl = hasReport ? getFileUrl(repo.name, 'report.pdf') : '';
+            const reportUrl = hasReport ? getPdfViewerUrl(repo.name, 'report.pdf') : '';
             
             return {
               repo,
@@ -570,9 +550,9 @@ main{padding:28px 7vw 60px}
                   </button>`
                 }
                 ${hasReport ? 
-                  `<button class="btn neon small view-report" data-url="${reportUrl}">
+                  `<a class="btn neon small" href="${reportUrl}" target="_blank" rel="noopener">
                     <i class="fas fa-file-pdf"></i> Report
-                  </button>` : 
+                  </a>` : 
                   `<button class="btn neon small" disabled>
                     <i class="fas fa-file-pdf"></i> No Report
                   </button>`
@@ -590,14 +570,6 @@ main{padding:28px 7vw 60px}
             const mediaUrl = button.getAttribute('data-url');
             const mediaType = button.getAttribute('data-type');
             showRender(mediaUrl, mediaType);
-          });
-        });
-
-        // Add event listeners to report buttons
-        document.querySelectorAll('.view-report').forEach(button => {
-          button.addEventListener('click', () => {
-            const reportUrl = button.getAttribute('data-url');
-            showReport(reportUrl);
           });
         });
 
