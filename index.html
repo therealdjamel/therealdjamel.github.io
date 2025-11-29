@@ -1009,9 +1009,9 @@ main{padding:40px 7vw 80px}
       return `https://github.com/${username}/${repoName}/blob/main/${fileName}`;
     }
 
-    async function loadProjects() {
-      const container = document.getElementById("projects-container");
-      try {
+ async function loadProjects() {
+    const container = document.getElementById("projects-container");
+    try {
         const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
         const repos = await res.json();
 
@@ -1019,134 +1019,141 @@ main{padding:40px 7vw 80px}
 
         // Process each repository
         const projectPromises = repos
-          .filter(repo => !repo.fork && !repo.archived && repo.name.toLowerCase() !== `${username}.github.io`)
-          .slice(0, 8)
-          .map(async repo => {
-            // Check for render files
-            const hasRenderPng = await checkFileExists(repo.name, 'render.png');
-            const hasRenderMp4 = await checkFileExists(repo.name, 'render.mp4');
-            const hasRenderGif = await checkFileExists(repo.name, 'render.gif');
-            const hasReport = await checkFileExists(repo.name, 'report.pdf');
-            const has3DModel = await checkFileExists(repo.name, 'index.html');
-            
-            // Determine media type and URL
-            let mediaType = 'none';
-            let mediaUrl = '';
-            
-            if (hasRenderPng) {
-              mediaType = 'image';
-              mediaUrl = getFileUrl(repo.name, 'render.png');
-            } else if (hasRenderMp4) {
-              mediaType = 'video';
-              mediaUrl = getFileUrl(repo.name, 'render.mp4');
-            } else if (hasRenderGif) {
-              mediaType = 'gif';
-              mediaUrl = getFileUrl(repo.name, 'render.gif');
-            }
-            
-            const reportUrl = hasReport ? getPdfViewerUrl(repo.name, 'report.pdf') : '';
-            const liveDemoUrl = has3DModel ? `https://${username}.github.io/${repo.name}/` : '';
-            
-            return {
-              repo,
-              mediaType,
-              mediaUrl,
-              hasReport,
-              reportUrl,
-              has3DModel,
-              liveDemoUrl
-            };
-          });
+            .filter(repo => !repo.fork && !repo.archived && repo.name.toLowerCase() !== `${username}.github.io`)
+            .slice(0, 8)
+            .map(async repo => {
+                // Check for files
+                const hasRenderPng = await checkFileExists(repo.name, 'render.png');
+                const hasRenderMp4 = await checkFileExists(repo.name, 'render.mp4');
+                const hasRenderGif = await checkFileExists(repo.name, 'render.gif');
+                const hasReport = await checkFileExists(repo.name, 'report.pdf');
+                const has3DModel = await checkFileExists(repo.name, 'index.html');
+                
+                // PRIORITIZE 3D PROJECTS - if index.html exists, it's 3D
+                const is3DProject = has3DModel;
+                
+                // Determine media type and URL for non-3D projects
+                let mediaType = 'none';
+                let mediaUrl = '';
+                
+                if (!is3DProject) {
+                    if (hasRenderPng) {
+                        mediaType = 'image';
+                        mediaUrl = getFileUrl(repo.name, 'render.png');
+                    } else if (hasRenderMp4) {
+                        mediaType = 'video';
+                        mediaUrl = getFileUrl(repo.name, 'render.mp4');
+                    } else if (hasRenderGif) {
+                        mediaType = 'gif';
+                        mediaUrl = getFileUrl(repo.name, 'render.gif');
+                    }
+                }
+                
+                const reportUrl = hasReport ? getPdfViewerUrl(repo.name, 'report.pdf') : '';
+                const liveDemoUrl = is3DProject ? `https://${username}.github.io/${repo.name}/` : '';
+                
+                return {
+                    repo,
+                    is3DProject,
+                    mediaType,
+                    mediaUrl,
+                    hasReport,
+                    reportUrl,
+                    liveDemoUrl
+                };
+            });
         
         // Wait for all file checks to complete
         const projects = await Promise.all(projectPromises);
         
         // Create project cards
         projects.forEach(project => {
-          const { repo, mediaType, mediaUrl, hasReport, reportUrl, has3DModel, liveDemoUrl } = project;
-          
-          const card = document.createElement("div");
-          card.classList.add("project-card");
-          
-          let mediaContent = '';
-          if (mediaType !== 'none') {
-            if (mediaType === 'image' || mediaType === 'gif') {
-              mediaContent = `<img src="${mediaUrl}" alt="${repo.name} render" loading="lazy">`;
-            } else if (mediaType === 'video') {
-              mediaContent = `<video muted loop><source src="${mediaUrl}" type="video/mp4">Your browser does not support the video tag.</video>`;
+            const { repo, is3DProject, mediaType, mediaUrl, hasReport, reportUrl, liveDemoUrl } = project;
+            
+            const card = document.createElement("div");
+            card.classList.add("project-card");
+            
+            let mediaContent = '';
+            if (is3DProject) {
+                // 3D PROJECT - always show cube icon
+                mediaContent = `<div class="media-placeholder">
+                    <i class="fas fa-cube"></i>
+                    <div>3D INTERACTIVE MODEL</div>
+                    <small>CLICK TO EXPERIENCE</small>
+                </div>`;
+            } else if (mediaType !== 'none') {
+                // REGULAR PROJECT with render media
+                if (mediaType === 'image' || mediaType === 'gif') {
+                    mediaContent = `<img src="${mediaUrl}" alt="${repo.name} render" loading="lazy">`;
+                } else if (mediaType === 'video') {
+                    mediaContent = `<video muted loop><source src="${mediaUrl}" type="video/mp4">Your browser does not support the video tag.</video>`;
+                }
+            } else {
+                // NO MEDIA AVAILABLE
+                mediaContent = `<div class="media-placeholder">
+                    <i class="fas fa-code"></i>
+                    <div>NO PREVIEW AVAILABLE</div>
+                </div>`;
             }
-          } else if (has3DModel) {
-            mediaContent = `<div class="media-placeholder">
-              <i class="fas fa-cube"></i>
-              <div>3D INTERACTIVE MODEL</div>
-              <small>CLICK RENDER TO VIEW</small>
-            </div>`;
-          } else {
-            mediaContent = `<div class="media-placeholder">
-              <i class="fas fa-code"></i>
-              <div>NO PREVIEW AVAILABLE</div>
-            </div>`;
-          }
-          
-          card.innerHTML = `
-            <div class="project-media">
-              ${mediaContent}
-            </div>
-            <div class="project-body">
-              <h4>${repo.name}</h4>
-              <p>${repo.description || 'No description provided.'}</p>
-              <div class="project-actions">
-                <a class="btn neon small" href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" target="_blank" rel="noopener">
-                  <i class="fas fa-download"></i> DOWNLOAD
-                </a>
-                <a class="btn neon small" href="${repo.html_url}" target="_blank" rel="noopener">
-                  <i class="fab fa-github"></i> REPO
-                </a>
-                ${has3DModel ? 
-                  `<a class="btn neon small" href="${liveDemoUrl}" target="_blank" rel="noopener">
-                    <i class="fas fa-cube"></i> 3D MODEL
-                  </a>` : 
-                  mediaType !== 'none' ? 
-                  `<button class="btn neon small view-render" data-url="${mediaUrl}" data-type="${mediaType}">
-                    <i class="fas fa-play"></i> RENDER
-                  </button>` : 
-                  `<button class="btn neon small" disabled>
-                    <i class="fas fa-play"></i> NO RENDER
-                  </button>`
-                }
-                ${hasReport ? 
-                  `<a class="btn neon small" href="${reportUrl}" target="_blank" rel="noopener">
-                    <i class="fas fa-file-pdf"></i> REPORT
-                  </a>` : 
-                  `<button class="btn neon small" disabled>
-                    <i class="fas fa-file-pdf"></i> NO REPORT
-                  </button>`
-                }
-              </div>
-            </div>
-          `;
-          
-          container.appendChild(card);
+            
+            card.innerHTML = `
+                <div class="project-media">
+                    ${mediaContent}
+                </div>
+                <div class="project-body">
+                    <h4>${repo.name}</h4>
+                    <p>${repo.description || 'No description provided.'}</p>
+                    <div class="project-actions">
+                        <a class="btn neon small" href="https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip" target="_blank" rel="noopener">
+                            <i class="fas fa-download"></i> DOWNLOAD
+                        </a>
+                        <a class="btn neon small" href="${repo.html_url}" target="_blank" rel="noopener">
+                            <i class="fab fa-github"></i> REPO
+                        </a>
+                        ${is3DProject ? 
+                            `<a class="btn neon small" href="${liveDemoUrl}" target="_blank" rel="noopener">
+                                <i class="fas fa-cube"></i> 3D MODEL
+                            </a>` : 
+                            mediaType !== 'none' ? 
+                            `<button class="btn neon small view-render" data-url="${mediaUrl}" data-type="${mediaType}">
+                                <i class="fas fa-play"></i> RENDER
+                            </button>` : 
+                            `<button class="btn neon small" disabled>
+                                <i class="fas fa-play"></i> NO RENDER
+                            </button>`
+                        }
+                        ${hasReport ? 
+                            `<a class="btn neon small" href="${reportUrl}" target="_blank" rel="noopener">
+                                <i class="fas fa-file-pdf"></i> REPORT
+                            </a>` : 
+                            `<button class="btn neon small" disabled>
+                                <i class="fas fa-file-pdf"></i> NO REPORT
+                            </button>`
+                        }
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(card);
         });
 
         // Add event listeners to render buttons
         document.querySelectorAll('.view-render').forEach(button => {
-          button.addEventListener('click', () => {
-            const mediaUrl = button.getAttribute('data-url');
-            const mediaType = button.getAttribute('data-type');
-            showRender(mediaUrl, mediaType);
-          });
+            button.addEventListener('click', () => {
+                const mediaUrl = button.getAttribute('data-url');
+                const mediaType = button.getAttribute('data-type');
+                showRender(mediaUrl, mediaType);
+            });
         });
 
         if (repos.length === 0) {
-          container.innerHTML = "<p class='muted'>NO PUBLIC PROJECTS FOUND.</p>";
+            container.innerHTML = "<p class='muted'>NO PUBLIC PROJECTS FOUND.</p>";
         }
-      } catch (error) {
+    } catch (error) {
         console.error(error);
         container.innerHTML = "<p class='muted'>ERROR LOADING PROJECTS.</p>";
-      }
     }
-    
+}
     loadProjects();
   </script>
 </body>
