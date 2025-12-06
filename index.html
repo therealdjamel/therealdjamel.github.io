@@ -1469,6 +1469,7 @@ main{
   </div>
 
   <!-- JavaScript for GitHub project loading -->
+   <!-- JavaScript for GitHub project loading -->
   <script>
     // GitHub username
     const username = "therealdjamel";
@@ -1598,9 +1599,15 @@ main{
             const hasReport = await checkFileExists(repo.name, 'report.pdf');
             const hasReadme = await checkFileExists(repo.name, 'README.md');
             
+            // Check if this is a 3D project (has myModel.glb and index.html)
+            const hasModelGlb = await checkFileExists(repo.name, 'myModel.glb');
+            const hasIndexHtml = await checkFileExists(repo.name, 'index.html');
+            
             // Determine media type and URL
             let mediaType = 'none';
             let mediaUrl = '';
+            let is3DProject = false;
+            let threeViewerUrl = '';
             
             if (hasRenderPng) {
               mediaType = 'image';
@@ -1611,6 +1618,12 @@ main{
             } else if (hasRenderGif) {
               mediaType = 'gif';
               mediaUrl = getFileUrl(repo.name, 'render.gif');
+            }
+            
+            // Check if this is a 3D project
+            if (hasModelGlb && hasIndexHtml) {
+              is3DProject = true;
+              threeViewerUrl = `https://${username}.github.io/${repo.name}/`;
             }
             
             const reportUrl = hasReport ? getPdfViewerUrl(repo.name, 'report.pdf') : '';
@@ -1624,6 +1637,8 @@ main{
               reportUrl,
               hasReadme,
               downloadUrl,
+              is3DProject,
+              threeViewerUrl,
               error: null
             };
           } catch (error) {
@@ -1636,6 +1651,8 @@ main{
               reportUrl: '',
               hasReadme: false,
               downloadUrl: `https://github.com/${username}/${repo.name}/archive/refs/heads/main.zip`,
+              is3DProject: false,
+              threeViewerUrl: '',
               error: error.message
             };
           }
@@ -1646,7 +1663,7 @@ main{
         
         // Create project cards
         projects.forEach(project => {
-          const { repo, mediaType, mediaUrl, hasReport, reportUrl, hasReadme, downloadUrl, error } = project;
+          const { repo, mediaType, mediaUrl, hasReport, reportUrl, hasReadme, downloadUrl, is3DProject, threeViewerUrl, error } = project;
           
           const card = document.createElement("div");
           card.classList.add("project-card");
@@ -1666,12 +1683,29 @@ main{
             </div>`;
           }
           
+          // Determine what the preview button should do
+          const previewAction = is3DProject && threeViewerUrl 
+            ? `<a class="btn neon small view-render-btn" href="${threeViewerUrl}" target="_blank" rel="noopener">
+                 <i class="fas fa-cube"></i> VIEW 3D
+               </a>`
+            : mediaUrl 
+            ? `<button class="btn neon small view-render-btn" data-url="${mediaUrl}" data-type="${mediaType}">
+                 <i class="fas fa-play"></i> PREVIEW
+               </button>`
+            : `<button class="btn neon small view-render-btn" data-url="${repo.html_url}" data-type="repo">
+                 <i class="fas fa-external-link-alt"></i> OPEN
+               </button>`;
+
+          // Add 3D badge if it's a 3D project
+          const projectBadge = is3DProject ? '<span class="threejs-badge" style="position: absolute; top: 10px; right: 10px; background: var(--neon-blue); color: black; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 10; font-family: \'Orbitron\';">3D</span>' : '';
+
           card.innerHTML = `
-            <div class="project-media" data-url="${mediaUrl}" data-type="${mediaType}">
+            <div class="project-media" data-url="${is3DProject ? threeViewerUrl : mediaUrl}" data-type="${is3DProject ? '3d' : mediaType}" data-is-3d="${is3DProject}">
               ${mediaContent}
+              ${projectBadge}
             </div>
             <div class="project-body">
-              <h4>${repo.name}</h4>
+              <h4>${repo.name} ${is3DProject ? ' <i class="fas fa-cube" style="color: var(--neon-blue); font-size: 14px;"></i>' : ''}</h4>
               <p>${repo.description || 'No description provided. This project is part of my W3D Lab work.'}</p>
               <div class="project-actions">
                 <a class="btn neon small" href="${downloadUrl}" target="_blank" rel="noopener">
@@ -1692,9 +1726,7 @@ main{
                     <i class="fas fa-file-alt"></i> NO DOCS
                   </button>`
                 }
-                <button class="btn neon small view-render-btn" data-url="${mediaUrl}" data-type="${mediaType}">
-                  <i class="fas fa-play"></i> PREVIEW
-                </button>
+                ${previewAction}
               </div>
             </div>
           `;
@@ -1711,9 +1743,18 @@ main{
               
               const mediaUrl = element.getAttribute('data-url');
               const mediaType = element.getAttribute('data-type');
+              const is3D = element.getAttribute('data-is-3d') === 'true';
               
-              if (mediaUrl && mediaType !== 'none') {
+              // If it's a 3D project button (link), let the default link behavior work
+              if (element.tagName === 'A') return;
+              
+              if (is3D && mediaUrl) {
+                // For 3D projects, open in new tab
+                window.open(mediaUrl, '_blank');
+              } else if (mediaUrl && mediaType !== 'none' && mediaType !== 'repo') {
                 showRender(mediaUrl, mediaType);
+              } else if (mediaUrl && mediaType === 'repo') {
+                window.open(mediaUrl, '_blank');
               } else {
                 // If no preview available, open the GitHub repository
                 const card = element.closest('.project-card');
@@ -1736,9 +1777,16 @@ main{
             card.addEventListener('click', (e) => {
               // Only trigger if clicking on the card itself (not buttons or media area)
               if (e.target === card || e.target.closest('.project-body') && !e.target.closest('.btn')) {
-                const repoLink = card.querySelector('a[href*="github.com"]');
-                if (repoLink) {
-                  window.open(repoLink.href, '_blank');
+                const is3D = mediaArea?.getAttribute('data-is-3d') === 'true';
+                const mediaUrl = mediaArea?.getAttribute('data-url');
+                
+                if (is3D && mediaUrl) {
+                  window.open(mediaUrl, '_blank');
+                } else {
+                  const repoLink = card.querySelector('a[href*="github.com"]');
+                  if (repoLink) {
+                    window.open(repoLink.href, '_blank');
+                  }
                 }
               }
             });
